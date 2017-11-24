@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -36,6 +37,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 super.handleMessage(msg);
                 if(msg.what == TCPReceiver.RECEIVESUCCESS){
                     TCPReceiver.TCP_RECEIVER.sendData(TCPDatas.TCP_DATAS.getFirstData());
+                }else if(msg.what == TCPReceiver.STARTSUCCESS){
+                    Log.d(TAG,"TCP server 启动成功");
+                }else if(msg.what == TCPReceiver.STARTFAILED){
+                    Log.d(TAG,"TCP server 启动失败");
                 }
             }
         };

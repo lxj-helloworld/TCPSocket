@@ -31,21 +31,26 @@ public enum TCPReceiver {
 
     public static final int RECEIVESUCCESS = 100;
     public static final int SENDSUCCESS = 101;
+    public static final int STARTSUCCESS = 102;
+    public static final int STARTFAILED = 103;
+
 
     TCPReceiver() {
     }
     public void init(int serverPort,Handler handler){
+        this.handler = handler;
         initSocket(serverPort);
         initReceiverMessage();
-        this.handler = handler;
     }
     private void initSocket(int serverPort) {
         try {
             // 创建一个ServerSocket对象，并设置监听端口
             serverSocket = new ServerSocket(serverPort);
             Log.i(TAG, "isBound=" + serverSocket.isBound() + "  isClosed=" + serverSocket.isClosed());
+            sendMessage(STARTSUCCESS,"");//启动成功
         } catch (IOException e) {
             e.printStackTrace();
+            sendMessage(STARTFAILED,"");//启动失败
         }
     }
 
