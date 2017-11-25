@@ -68,7 +68,7 @@ public enum TCPReceiver {
                 Log.d(TAG," = " + clicksSocket.getRemoteSocketAddress());
                 // 从Socket当中得到InputStream对象
                 inputstream = clicksSocket.getInputStream();
-                byte buffer[] = new byte[10 * 1024];
+                byte buffer[] = new byte[20];
                 int temp = 0;
                 // 从InputStream当中读取客户端所发送的数据
                 while ((temp = inputstream.read(buffer)) != -1) {
