@@ -1,5 +1,4 @@
 package com.example.xiaojin20135.tcpsocket;
-
 import android.content.Context;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -10,52 +9,47 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
 import com.example.xiaojin20135.tcplibrary.TCPDatas;
-import com.example.xiaojin20135.tcplibrary.TCPReceiver;
-
+import com.example.xiaojin20135.tcplibrary.TCPUtil;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "MainActivity";
     private Button start_btn;
     private Handler handler;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         start_btn = (Button)findViewById(R.id.start_btn);
         initHandler();
-
-
     }
-
-
     private void initHandler(){
         handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if(msg.what == TCPReceiver.RECEIVESUCCESS){
-                    TCPReceiver.TCP_RECEIVER.sendData(TCPDatas.TCP_DATAS.getFirstData());
-                }else if(msg.what == TCPReceiver.STARTSUCCESS){
+                if(msg.what == TCPUtil.RECEIVESUCCESS){
+                    byte[] temp = TCPDatas.TCP_DATAS.getFirstData();
+                    for(int i=0;i<10;i++){
+                        boolean sendResult = TCPUtil.TCP_UTIL.sendData(temp);
+                        if(sendResult){
+                            TCPDatas.TCP_DATAS.removeFirstData();
+                        }
+                    }
+                }else if(msg.what == TCPUtil.STARTSUCCESS){
                     Log.d(TAG,"TCP server 启动成功");
-                }else if(msg.what == TCPReceiver.STARTFAILED){
+                }else if(msg.what == TCPUtil.STARTFAILED){
                     Log.d(TAG,"TCP server 启动失败");
                 }
             }
         };
     }
-
-
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.start_btn){
-            TCPReceiver.TCP_RECEIVER.init(8080,handler);
+            TCPUtil.TCP_UTIL.init(8080,handler);
         }
     }
-
     /**
-     *
      * 获取WIFI下ip地址
      */
     private String getLocalIpAddress() {

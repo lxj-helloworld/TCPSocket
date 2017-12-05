@@ -16,8 +16,8 @@ import java.util.concurrent.Executors;
  * Created by xiaojin20135 on 2017-11-22.
  */
 
-public enum TCPReceiver {
-    TCP_RECEIVER;
+public enum TCPUtil {
+    TCP_UTIL;
     private static final String TAG = "TCPReceiver";
     /**
      * 接收数据的服务端Socket
@@ -28,14 +28,11 @@ public enum TCPReceiver {
     OutputStream outputStream;//创建输出数据流
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
     private Handler handler;
-
     public static final int RECEIVESUCCESS = 100;
     public static final int SENDSUCCESS = 101;
     public static final int STARTSUCCESS = 102;
     public static final int STARTFAILED = 103;
-
-
-    TCPReceiver() {
+    TCPUtil() {
     }
     public void init(int serverPort,Handler handler){
         this.handler = handler;
@@ -53,7 +50,6 @@ public enum TCPReceiver {
             sendMessage(STARTFAILED,"");//启动失败
         }
     }
-
     private void initReceiverMessage() {
         executorService.execute(runnableReceiverMsg);
     }
@@ -88,7 +84,6 @@ public enum TCPReceiver {
             }
         }
     };
-
     public boolean sendData(byte[] datas){
         boolean result = true;
         try{
@@ -105,12 +100,13 @@ public enum TCPReceiver {
         }
         return result;
     }
-
     private void sendMessage(int what,String obj){
         Message message = new Message();
         message.what = what;
         message.obj = obj;
-        handler.sendMessage(message);
+        if(handler != null){
+            handler.sendMessage(message);
+        }
     }
 
 }
