@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 
 public enum TCPUtil {
     TCP_UTIL;
-    private static final String TAG = "TCPReceiver";
+    private static final String TAG = "TCPUtil";
     /**
      * 接收数据的服务端Socket
      */
@@ -35,7 +35,9 @@ public enum TCPUtil {
     TCPUtil() {
     }
     public void init(int serverPort,Handler handler){
-        this.handler = handler;
+        if(handler != null){
+            this.handler = handler;
+        }
         initSocket(serverPort);
         initReceiverMessage();
     }
