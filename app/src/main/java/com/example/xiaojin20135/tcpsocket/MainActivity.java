@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.start_btn){
-            TCPUtil.TCP_UTIL.init(8080,handler);
+            TCPUtil.TCP_UTIL.init(8080,handler,100,true);
         }
     }
     /**

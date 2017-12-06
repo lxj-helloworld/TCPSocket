@@ -28,18 +28,22 @@ public enum TCPUtil {
     OutputStream outputStream;//创建输出数据流
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
     private Handler handler;
+    private int byteLen = 100; //接受报文长度，默认为100
+    private boolean showLog = true; //接收报文是否显示日志
     public static final int RECEIVESUCCESS = 100;
     public static final int SENDSUCCESS = 101;
     public static final int STARTSUCCESS = 102;
     public static final int STARTFAILED = 103;
     TCPUtil() {
     }
-    public void init(int serverPort,Handler handler){
+    public void init(int serverPort,Handler handler,int byteLen,boolean showLog){
         if(handler != null){
             this.handler = handler;
         }
         initSocket(serverPort);
         initReceiverMessage();
+        this.byteLen = byteLen;
+        this.showLog = showLog;
     }
     private void initSocket(int serverPort) {
         try {
@@ -66,19 +70,22 @@ public enum TCPUtil {
                 Log.d(TAG," = " + clicksSocket.getRemoteSocketAddress());
                 // 从Socket当中得到InputStream对象
                 inputstream = clicksSocket.getInputStream();
-                byte buffer[] = new byte[20];
+                byte buffer[] = new byte[byteLen];
                 int temp = 0;
                 // 从InputStream当中读取客户端所发送的数据
                 while ((temp = inputstream.read(buffer)) != -1) {
-                    Log.i(TAG, new String(buffer, 0, temp));  //打印接收到的信息
                     if(temp > 0){
-                        StringBuilder receiveArr = new StringBuilder("");
-                        for(int i=0;i<temp;i++){
-                            receiveArr.append(Integer.toHexString(buffer[i]) + " ");
+                        if(showLog){
+                            StringBuilder receiveArr = new StringBuilder("");
+                            for(int i=0;i<temp;i++){
+                                receiveArr.append(Integer.toHexString(buffer[i] & 0xFF) + " ");
+                            }
+                            Log.d(TAG,"receiveArr = " + receiveArr);
                         }
-                        Log.d(TAG,"receiveArr = " + receiveArr);
                         TCPDatas.TCP_DATAS.addDatas(buffer);
                         sendMessage(RECEIVESUCCESS,"");
+                    }else{
+                        Log.d(TAG,"未接收到数据.");
                     }
                 }
             } catch (IOException e) {
