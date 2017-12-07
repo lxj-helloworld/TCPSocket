@@ -73,8 +73,10 @@ public enum TCPUtil {
                 byte buffer[] = new byte[byteLen];
                 int temp = 0;
                 // 从InputStream当中读取客户端所发送的数据
+                int length = 0;
                 while ((temp = inputstream.read(buffer)) != -1) {
                     if(temp > 0){
+                        Log.d(TAG,"temp = " + temp);
                         if(showLog){
                             StringBuilder receiveArr = new StringBuilder("");
                             for(int i=0;i<temp;i++){
@@ -82,7 +84,9 @@ public enum TCPUtil {
                             }
                             Log.d(TAG,"receiveArr = " + receiveArr);
                         }
-                        TCPDatas.TCP_DATAS.addDatas(buffer);
+                        byte[] tempArr = new byte[temp];
+                        System.arraycopy(buffer,0,tempArr,0,temp);
+                        TCPDatas.TCP_DATAS.addDatas(tempArr);
                         sendMessage(RECEIVESUCCESS,"");
                     }else{
                         Log.d(TAG,"未接收到数据.");

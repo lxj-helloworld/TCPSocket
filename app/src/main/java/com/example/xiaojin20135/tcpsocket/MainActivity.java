@@ -29,12 +29,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 super.handleMessage(msg);
                 if(msg.what == TCPUtil.RECEIVESUCCESS){
                     byte[] temp = TCPDatas.TCP_DATAS.getFirstData();
-                    for(int i=0;i<10;i++){
+                    if(temp != null){
+                        Log.d(TAG,"temp.length = " + temp.length);
+                    }
+                    /*for(int i=0;i<10;i++){
                         boolean sendResult = TCPUtil.TCP_UTIL.sendData(temp);
                         if(sendResult){
                             TCPDatas.TCP_DATAS.removeFirstData();
                         }
-                    }
+                    }*/
                 }else if(msg.what == TCPUtil.STARTSUCCESS){
                     Log.d(TAG,"TCP server 启动成功");
                 }else if(msg.what == TCPUtil.STARTFAILED){
