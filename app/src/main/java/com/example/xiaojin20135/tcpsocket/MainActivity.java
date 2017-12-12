@@ -27,7 +27,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if(msg.what == TCPUtil.RECEIVESUCCESS){
+                if(msg.what == TCPUtil.CONNECTED){
+                    Log.d(TAG,"TCP client 连接成功");
+                }else if(msg.what == TCPUtil.RECEIVESUCCESS){
                     byte[] temp = TCPDatas.TCP_DATAS.getFirstData();
                     if(temp != null){
                         Log.d(TAG,"temp.length = " + temp.length);

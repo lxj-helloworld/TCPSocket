@@ -34,6 +34,8 @@ public enum TCPUtil {
     public static final int SENDSUCCESS = 101;
     public static final int STARTSUCCESS = 102;
     public static final int STARTFAILED = 103;
+    public static final int CONNECTED = 104;//客户端连接成功
+
     TCPUtil() {
     }
     public void init(int serverPort,Handler handler,int byteLen,boolean showLog){
@@ -67,7 +69,8 @@ public enum TCPUtil {
                 // 调用ServerSocket的accept()方法，接受客户端所发送的请求，
                 clicksSocket = serverSocket.accept();
                 Log.d(TAG,"getPort = " + clicksSocket.getPort());
-                Log.d(TAG," = " + clicksSocket.getRemoteSocketAddress());
+                Log.d(TAG,"getRemoteSocketAddress = " + clicksSocket.getRemoteSocketAddress());
+                sendMessage(CONNECTED,clicksSocket.getRemoteSocketAddress() + ":" + clicksSocket.getPort() + "connected." );
                 // 从Socket当中得到InputStream对象
                 inputstream = clicksSocket.getInputStream();
                 byte buffer[] = new byte[byteLen];
