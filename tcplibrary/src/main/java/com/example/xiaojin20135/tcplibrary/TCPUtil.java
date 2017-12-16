@@ -70,7 +70,7 @@ public enum TCPUtil {
                 clicksSocket = serverSocket.accept();
                 Log.d(TAG,"getPort = " + clicksSocket.getPort());
                 Log.d(TAG,"getRemoteSocketAddress = " + clicksSocket.getRemoteSocketAddress());
-                sendMessage(CONNECTED,clicksSocket.getRemoteSocketAddress() + "connected." );
+                sendMessage(CONNECTED,clicksSocket.getRemoteSocketAddress() + " connected." );
                 // 从Socket当中得到InputStream对象
                 inputstream = clicksSocket.getInputStream();
                 byte buffer[] = new byte[byteLen];
