@@ -35,6 +35,7 @@ public enum TCPUtil {
     public static final int STARTSUCCESS = 102;
     public static final int STARTFAILED = 103;
     public static final int CONNECTED = 104;//客户端连接成功
+    private boolean isRunging = true;
 
     TCPUtil() {
     }
@@ -58,6 +59,31 @@ public enum TCPUtil {
             sendMessage(STARTFAILED,"");//启动失败
         }
     }
+
+    public boolean closeServer(){
+        boolean result = true;
+        try {
+            if(serverSocket != null){
+                serverSocket.close();
+            }
+            if(inputstream != null){
+                inputstream.close();
+            }
+            if(clicksSocket != null){
+                clicksSocket.close();
+            }
+
+            isRunging = false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            result = false;
+        }finally {
+            serverSocket = null;
+            clicksSocket = null;
+        }
+        return result;
+    }
+
     private void initReceiverMessage() {
         executorService.execute(runnableReceiverMsg);
     }
@@ -77,7 +103,8 @@ public enum TCPUtil {
                 int temp = 0;
                 // 从InputStream当中读取客户端所发送的数据
                 int length = 0;
-                while ((temp = inputstream.read(buffer)) != -1) {
+                while (isRunging && inputstream != null && (temp = inputstream.read(buffer)) != -1) {
+                    Log.d(TAG,"in ");
                     if(temp > 0){
                         Log.d(TAG,"temp = " + temp);
                         if(showLog){
@@ -90,12 +117,16 @@ public enum TCPUtil {
                         byte[] tempArr = new byte[temp];
                         System.arraycopy(buffer,0,tempArr,0,temp);
                         TCPDatas.TCP_DATAS.addDatas(tempArr);
-//                        sendMessage(RECEIVESUCCESS,"");
+                        sendMessage(RECEIVESUCCESS,"");
                     }else{
                         Log.d(TAG,"未接收到数据.");
                     }
+                    Thread.sleep(1000);
                 }
+                Log.d(TAG,"end.");
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }

@@ -15,6 +15,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
     private Button start_btn;
     private Handler handler;
+
+    private int count = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             TCPDatas.TCP_DATAS.removeFirstData();
                         }
                     }*/
+                    if(count++ > 3){
+                        Log.d(TAG,"关闭Server");
+                        boolean close = TCPUtil.TCP_UTIL.closeServer();
+                        Log.d(TAG,"close = " + close);
+                    }
                 }else if(msg.what == TCPUtil.STARTSUCCESS){
                     Log.d(TAG,"TCP server 启动成功");
                 }else if(msg.what == TCPUtil.STARTFAILED){
