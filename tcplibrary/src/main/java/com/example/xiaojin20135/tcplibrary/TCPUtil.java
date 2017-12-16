@@ -117,7 +117,7 @@ public enum TCPUtil {
                         byte[] tempArr = new byte[temp];
                         System.arraycopy(buffer,0,tempArr,0,temp);
                         TCPDatas.TCP_DATAS.addDatas(tempArr);
-                        sendMessage(RECEIVESUCCESS,"");
+//                        sendMessage(RECEIVESUCCESS,"");
                     }else{
                         Log.d(TAG,"未接收到数据.");
                     }
